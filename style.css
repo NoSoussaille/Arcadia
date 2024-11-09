@@ -431,6 +431,7 @@ fieldset {
 
 .formulaire input[type="text"],
 .formulaire input[type="email"],
+.formulaire input[type="password"],
 .formulaire textarea {
     width: 100%;
     padding: 10px;
@@ -439,7 +440,10 @@ fieldset {
     border-radius: 20px;
     font-size: 16px;
 }
-
+.formulaire #mdp.custom-password-field {
+    border-radius: 20px !important; /* Assure-toi que cette propriété est prioritaire */
+    box-shadow: none !important;    /* Désactive l'ombre de Bootstrap */
+}
 /* Mise en page des divs pour alignement des champs */
 #div_nm, #div_fnm {
     display: inline-block;
@@ -460,6 +464,7 @@ textarea {
     font-size: 16px;
     resize: none; /* Empêche le redimensionnement */
 }
+
 
 /* Responsive Design pour petits écrans */
 @media (max-width: 768px) {

@@ -1,4 +1,4 @@
-<?php require_once 'header.php'?>
+<?php require_once 'elements/header.php'?>
     <div class="title beige">
         <h2 class="sous-menu vert" id="train">Le petit train</h2>
     </div>
@@ -47,7 +47,7 @@
        </p>
    </div>
    
-<?php require_once 'footer.php'; ?>
+<?php require_once 'elements/footer.php'; ?>
 <script src="script.js"></script>
 </body>
 </html>

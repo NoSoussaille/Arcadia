@@ -1,4 +1,4 @@
-<?php require_once 'header.php'?>
+<?php require_once 'elements/header.php'?>
     <div class="title beige">
         <h2 class="sous-menu vert">L'écologie au centre d'Arcadia</h2>
     </div>
@@ -40,7 +40,7 @@
         <img class="imgeco" src="image/le parc/electric-car-1458836_640.jpg" alt="Photo d'une voiture électrique en train de charger sur le parking d'Arcadia">
     </div>
 
-<?php require_once 'footer.php'; ?>
+<?php require_once 'elements/footer.php'; ?>
 <script src="script.js"></script>
 </body>
 </html>

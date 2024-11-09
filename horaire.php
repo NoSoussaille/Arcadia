@@ -1,4 +1,4 @@
-<?php require_once 'header.php'?>
+<?php require_once 'elements/header.php'?>
     <div class="mainpage">
    
         <img src="image/page d'accueil/Image.webp" alt="photo de l'entrée du zoo d'Arcadia" class="imgZoo">
@@ -29,7 +29,7 @@
         </p>
     </div>
     
-<?php require_once 'footer.php'; ?>
+<?php require_once 'elements/footer.php'; ?>
 <script src="script.js"></script>
 </body>
 </html>

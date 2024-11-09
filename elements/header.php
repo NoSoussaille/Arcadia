@@ -6,7 +6,6 @@
     <title>Header Arcadia</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="styleanimaux.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Signika+Negative:wght@300..700&display=swap" rel="stylesheet">
@@ -37,7 +36,7 @@
                         <li><a href="contact.php#avis">Laisser un avis</a></li>
                     </ul>
                 </li>
-                <li><a href="#">Connexion</a></li>
+                <li><a href="connexion.php">Connexion</a></li>
             </ul>
         </nav>- 
     </header>
