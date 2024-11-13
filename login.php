@@ -1,18 +1,9 @@
 <?php
+// Démarrage de la session
+session_start();
+define('BASE_URL', '/Arcadia/');  // Modifiez selon le chemin racine de votre projet
 // Détails de connexion à la base de données
-$db_host = '127.0.0.1';
-$db_user = 'root';
-$db_password = 'root';
-$db_db = 'zoo_arcadia';
-$db_port = 8889;
-
-// Connexion à la base de données
-$mysqli = new mysqli($db_host, $db_user, $db_password, $db_db, $db_port);
-
-// Vérifie la connexion
-if ($mysqli->connect_error) {
-    die('Erreur de connexion (' . $mysqli->connect_errno . ') ' . $mysqli->connect_error);
-}
+require_once 'db_connection.php';
 
 // Vérifie si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -21,19 +12,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $username = $_POST['username'];
         $password = $_POST['mdp'];
 
-        // Prépare la requête pour vérifier les identifiants
-        $stmt = $mysqli->prepare("SELECT * FROM utilisateurs WHERE username = ? AND mdp = ?");
-        $stmt->bind_param("ss", $username, $password);
+        // Prépare la requête pour vérifier les identifiants et récupérer le rôle et le mot de passe haché
+        $stmt = $mysqli->prepare("
+            SELECT utilisateurs.id, utilisateurs.username, utilisateurs.mdp, roles.nom AS role
+            FROM utilisateurs
+            INNER JOIN utilisateur_roles ON utilisateurs.id = utilisateur_roles.utilisateur_id
+            INNER JOIN roles ON utilisateur_roles.role_id = roles.id
+            WHERE utilisateurs.username = ?
+            LIMIT 1
+        ");
+        $stmt->bind_param("s", $username);
         $stmt->execute();
         $result = $stmt->get_result();
 
-        // Vérifie si les identifiants sont corrects
+        // Vérifie si un utilisateur est trouvé
         if ($result->num_rows > 0) {
-            // Connexion réussie, redirection vers dashboard.php
-            header("Location: dashbord/dashbord.php");
-            exit(); // Arrête l'exécution du script après la redirection
+            $user = $result->fetch_assoc();
+
+            // Vérifie le mot de passe haché
+            if (password_verify($password, $user['mdp'])) {
+                // Enregistre les informations de l'utilisateur dans la session
+                $_SESSION['username'] = $user['username'];
+                $_SESSION['role'] = $user['role'];
+
+                // Redirection vers le dashboard
+                header("Location: dashbord/dashbord.php");
+                exit();
+            } else {
+                // Mot de passe incorrect, redirection avec message d'erreur
+                header("Location: connexion.php?error=1");
+                exit();
+            }
         } else {
-            // Identifiants incorrects, redirection avec erreur
+            // Identifiants incorrects, redirection avec message d'erreur
             header("Location: connexion.php?error=1");
             exit();
         }
@@ -41,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Ferme la requête
         $stmt->close();
     } else {
-        // Champs manquants, redirection avec erreur
+        // Champs manquants, redirection avec message d'erreur
         header("Location: connexion.php?error=1");
         exit();
     }

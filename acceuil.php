@@ -1,14 +1,45 @@
-<?php require_once 'elements/header.php'?>
-    <div class="mainpage">
-   
-        <img src="image/page d'accueil/Image.webp" alt="photo de l'entrée du zoo d'Arcadia" class="imgZoo">
-            <p class="horaire">Nous sommes ouverts du mercredi au dimanche,
-                <br>
-                de <strong>10h</strong> à <strong>19h</strong> sans interruption.
-                <br>
-                Le zoo est également ouvert les jours fériés.
-            </p>
-        </div>
+<?php
+require_once 'elements/header.php';
+?>
+    <div class="title beige">
+        <h2 class="sous-menu vert">Bienvenue</h2>
+    </div>
+<div class="mainpage">
+    <img src="image/page d'accueil/Image.webp" alt="photo de l'entrée du zoo d'Arcadia" class="imgZoo">
+
+    <?php
+    // Vérification de la connexion déjà effectuée dans db_connection.php
+    // Informations de connexion à la base de données
+    require_once 'db_connection.php';
+    // Récupère les horaires d'ouverture
+    $query = "SELECT jour, ouverture, fermeture FROM horaires_ouverture ORDER BY FIELD(jour, 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche')";
+    $result = $mysqli->query($query);
+
+    // Génération du tableau des horaires
+    $horaires = [];
+    while ($row = $result->fetch_assoc()) {
+        $jour = ucfirst($row['jour']);
+        $ouverture = date('H:i', strtotime($row['ouverture']));
+        $fermeture = date('H:i', strtotime($row['fermeture']));
+        
+        if ($ouverture === '00:00' && $fermeture === '00:00') {
+            $horaires[$jour] = 'Fermé';
+        } else {
+            $horaires[$jour] = "de $ouverture à $fermeture";
+        }
+    }
+    $result->free();
+    ?>
+
+    <div class="bienvenue2">
+        <h3>Horaires d'ouverture</h3>
+        <ul>
+            <?php foreach ($horaires as $jour => $horaire): ?>
+                <li><strong><?php echo $jour; ?></strong> : <?php echo $horaire; ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+</div>
     
     <div class="mainpage2">
         <p class="bienvenue">Bienvenue au Zoo Arcadia, situé en plein cœur de la
@@ -32,62 +63,120 @@
         <br><a href="ecologie.php" class="button">Voir plus</a></p>
     </div>
     <div class="title vert">
-            <h2 class="sous-menu beige">Les habitats</h2>
-        </div>
+    <h2 class="sous-menu beige">Les habitats du zoo</h2>
+</div>
     <div class="mainpage4">
-        <div class="savane">
-            <a href="https://www.example.com"><img src="image/page d'accueil/sunset-3750152_640.jpg" alt="Image de la savane au coucher du soleil"></a>
-            <a href="habitats.php#savane" class="button">La savane</a>
-        </div>
+    <?php 
+    // Récupération des habitats
+    $query_habitats = "SELECT id, nom, description, image FROM habitats LIMIT 3";  // Limite à 3 habitats
+    $result_habitats = $mysqli->query($query_habitats);
 
-        <div class="jungle">
-        <a href="https://www.example.com"><img src="image/page d'accueil/gorilla-7708352_640.jpg" alt="Image d'un singe dans la jungle"></a>
-            <a href="habitats.php#jungle" class="button">La jungle</a>
-        </div>
+    while ($habitat = $result_habitats->fetch_assoc()):
+        // Génère le chemin de l'image pour chaque habitat
+        $photo_path = !empty($habitat['image']) ? "dashbord/" . $habitat['image'] : "images/default_habitat.jpg";
+    ?>
+        <a href="habitats.php?id=<?php echo $habitat['id']; ?>" class="card-link">
+            <div class="card">
+                <img src="<?php echo htmlspecialchars($photo_path); ?>" class="card-img-top" alt="Image de <?php echo htmlspecialchars($habitat['nom']); ?>">
+                <div class="card-body">
+                    <h5 class="card-title"><?php echo htmlspecialchars($habitat['nom']); ?></h5>
+                </div>
+            </div>
+        </a>
+    <?php endwhile; ?>
+</div>
 
-        <div class="marais">
-        <a href="https://www.example.com"><img src="image/page d'accueil/crocodile-8003179_640.jpg" alt="Image d'un crocodile dans un marais"></a>
-            <a href="habitats.php#marais" class="button">Le marais</a>
-        </div>
+<div class="mainpage4">
+    <a href="habitats.php" class="button">Voir plus</a>
+</div>
+
+
+<div class="title vert">
+    <h2 class="sous-menu beige">Nos Services</h2>
+</div>
+
+<div class="mainpage4">
+    <?php 
+    // Récupération des services
+    $query_services = "SELECT id, nom, description, photo FROM services LIMIT 3";  // Limite à 3 services
+    $result_services = $mysqli->query($query_services);
+
+    while ($service = $result_services->fetch_assoc()):
+        // Génère le chemin de l'image pour chaque service
+        $photo_path = !empty($service['photo']) ? "dashbord/" . $service['photo'] : "images/default_service.jpg";
+    ?>
+        <a href="service.php?id=<?php echo $service['id']; ?>" class="card-link">
+            <div class="card">
+                <img src="<?php echo htmlspecialchars($photo_path); ?>" class="card-img-top" alt="Image de <?php echo htmlspecialchars($service['nom']); ?>">
+                <div class="card-body">
+                    <h5 class="card-title"><?php echo htmlspecialchars($service['nom']); ?></h5>
+                </div>
+            </div>
+        </a>
+    <?php endwhile; ?>
+</div>
     </div>
+         <div class="mainpage4">
+            <a href="service.php" class="button">Voir plus</a>
+        </div>
+</div>
 
+<?php
+// Libérer les résultats et fermer la connexion
+$result_services->free();
+?>
     <div class="title beige">
-        <h2 class="sous-menu vert">Les Services</h2>
+        <h2 class="sous-menu vert"> Avis</h2>
     </div>
     <div class="mainpage5">
-        <div class="train-main">
-            <a href="https://www.example.com">
-            <img src="image/page d'accueil/tannheim-valley-2692124_640.jpg" alt="Image de notre petit train">
-            </a>
-            <a href="#" class="button">Le petit train</a>
-        </div>
-
-        <div class="restauration-main">
-        <a href="https://www.example.com">
-            <img src="image/page d'accueil/burger-4379863_640.jpg" alt="Image d'une de nos assietes de burger">
-            </a>
-            <a href="#" class="button">Restauration</a>
-        </div>
-
-        <div class="visite-main">
-            <a href="https://www.example.com">
-                <img src="image/page d'accueil/tour-guide-6816049_640.jpg" alt="Image d'un guide du Zoo avec un groupe">
-            </a>
-            <a href="#" class="button">Visite guidée</a>
-        </div>
-    </div>
-
-    <div class="title vert">
-        <h2 class="sous-menu beige"> Avis</h2>
-    </div>
-    <div class="mainpage6">
-        <div class="mainavis">
-            <p class="excuse">SECTION AVIS BIENTOT DISPONIBLE</p>
-            <p class="excuse">EXCUSEZ NOUS POUR LA GENE OCCASIONNEE</p>
-            <a href="#" class="button">Laisser un avis</a>
-        </div>
+    <?php 
+        // Requête pour récupérer les avis approuvés
+        $query = "SELECT pseudo, avis FROM avis_client WHERE status = 'approved'";
+        $result = $mysqli->query($query);
         
-    </div>
+        if ($result->num_rows > 0): ?>
+            <div id="avisCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <?php $isActive = true; ?>
+                    <?php while($row = $result->fetch_assoc()): ?>
+                        <div class="carousel-item <?php echo $isActive ? 'active' : ''; ?>">
+                            <div class="mainavis text-center">
+                                <p class="pseudo"><strong><?php echo htmlspecialchars($row['pseudo']); ?></strong></p>
+                                <p class="avis"><?php echo htmlspecialchars(stripslashes($row['avis'])); ?></p>
+                            </div>
+                        </div>
+                        <?php $isActive = false; ?>
+                    <?php endwhile; ?>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#avisCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Précédent</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#avisCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Suivant</span>
+                </button>
+            </div>
+        <?php else: ?>
+            <div class="mainavis">
+                <p class="excuse">SECTION AVIS BIENTOT DISPONIBLE</p>
+                <p class="excuse">EXCUSEZ NOUS POUR LA GENE OCCASIONNEE</p>
+                <a href="#" class="button">Laisser un avis</a>
+            </div>
+        <?php endif; ?>
+
+    <?php
+    // Libération des résultats et fermeture de la connexion
+    $result->free();
+    $mysqli->close();
+    ?>
+    
+</div>
+<div class="mainpage6">
+    <a href="contact.php#avis" class="button">Laisser un avis</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     
 <?php require_once 'elements/footer.php'; ?>
 <script src="script.js"></script>

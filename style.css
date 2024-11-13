@@ -332,8 +332,7 @@ footer {
 }
 
 .bienvenue2, 
-.horaire,
-.mainavis {
+.horaire {
     background-color: #4F6F52;
     color: white;
     padding: 20px;
@@ -345,6 +344,25 @@ footer {
     line-height: 1.6;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     
+}
+
+.mainavis {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 0 auto;
+    max-width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pseudo {
+    font-weight: bold;
+    color: #2f4f37;
+}
+
+.avis {
+    color: #333;
+    margin-top: 10px;
 }
 
 
@@ -440,10 +458,7 @@ fieldset {
     border-radius: 20px;
     font-size: 16px;
 }
-.formulaire #mdp.custom-password-field {
-    border-radius: 20px !important; /* Assure-toi que cette propriété est prioritaire */
-    box-shadow: none !important;    /* Désactive l'ombre de Bootstrap */
-}
+
 /* Mise en page des divs pour alignement des champs */
 #div_nm, #div_fnm {
     display: inline-block;
@@ -463,6 +478,52 @@ textarea {
     border-radius: 20px;
     font-size: 16px;
     resize: none; /* Empêche le redimensionnement */
+}
+/* Conteneur des services */
+.services-container {
+    display: flex;
+    gap: 20px;  /* Espacement entre les cartes */
+    justify-content: center;  /* Centrer les cartes horizontalement */
+}
+
+/* Styles des cartes */
+.card {
+    width: 250px;  /* Largeur fixe pour chaque carte */
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;  /* Animation au survol */
+    background-color: #E8DFCA;
+}
+.card-link {
+    text-decoration: none; /* Supprime la décoration du lien */
+    color: inherit; /* Hérite la couleur du texte de l'élément parent (ici, la carte) */
+}
+
+/* Survol des cartes */
+.card:hover {
+    transform: scale(1.05);
+}
+
+/* Style de l'image dans les cartes */
+.card-img-top {
+    width: 250px;
+    height: 250px;  /* Fixe la hauteur de l'image */
+    object-fit: cover;
+}
+
+/* Titre et description */
+.card-title {
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Bouton "Voir plus" */
+.text-center .btn {
+    margin-top: 20px;
+    font-size: 1.1rem;
+    padding: 10px 20px;
 }
 
 

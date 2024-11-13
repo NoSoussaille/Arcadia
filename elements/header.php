@@ -38,5 +38,5 @@
                 </li>
                 <li><a href="connexion.php">Connexion</a></li>
             </ul>
-        </nav>- 
+        </nav> 
     </header>

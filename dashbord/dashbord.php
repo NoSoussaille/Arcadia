@@ -1,51 +1,74 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
-    <title>Bootstrap Example</title>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> 
-  </head>
-  <body class="p-3 m-0 border-0 bd-example m-0 border-0">
+<?php require_once 'headerdash.php' ?>
 
-    <header>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">ARCADIA</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Acceuil</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Gestion Avis</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Vétérinaire</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Section Direction
-          </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Gestion des services</a></li>
-            <li><a class="dropdown-item" href="#">Gestion Animaux et Habitats</a></li>
-            <li><a class="dropdown-item" href="#">Réinitialiser un mot de passe</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
-    </header>
+<div class="title beige">
+    <H3 class="sous-menu vert">Bienvenue, <?php echo htmlspecialchars($_SESSION['username']); ?>!</H3>
+</div>
 
-    <section>
+<?php
+// Affiche le message d'erreur si le paramètre 'error' est dans l'URL
+if (isset($_GET['error']) && $_GET['error'] == 'acces_refuse') {
+    echo "<div class='alert alert-danger text-center' role='alert'>
+        Vous n'avez pas accès à cette section.
+      </div>";
+}
+
+// Connexion à la base de données
+require_once 'db_connexion.php';
+
+// Récupérer les horaires actuels
+$horaires_result = $mysqli->query("SELECT * FROM horaires_ouverture");
+
+// Traitement du formulaire de mise à jour des horaires
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['role']) && $_SESSION['role'] === 'administrateur') {
+    foreach ($_POST['horaires'] as $jour => $horaire) {
+        $ouverture = $mysqli->real_escape_string($horaire['ouverture']);
+        $fermeture = $mysqli->real_escape_string($horaire['fermeture']);
+        
+        $stmt = $mysqli->prepare("UPDATE horaires_ouverture SET ouverture = ?, fermeture = ? WHERE jour = ?");
+        $stmt->bind_param("sss", $ouverture, $fermeture, $jour);
+        $stmt->execute();
+    }
+    header("Location: dashbord.php");
+    exit();
+}
+?>
+
+<section class="dash1">
     <iframe id="widget_autocomplete_preview"  width="400" height="320" frameborder="0" src="https://meteofrance.com/widget/prevision/352110##358D39CC" title="Prévisions Paimpont par Météo-France"> </iframe>
-    </section>
+</section>
+
+<?php if ($_SESSION['role'] === 'administrateur'): ?>
+    <div class="title beige">
+        <h3 class="sous-menu vert">Modifier les Horaires d'Ouverture</h3>
+    </div>
+    <div class="dash1">
+        <form method="POST">
+            <?php while ($horaire = $horaires_result->fetch_assoc()): ?>
+                <?php
+                    // Formater les horaires sans les secondes
+                    $ouverture = date('H:i', strtotime($horaire['ouverture']));
+                    $fermeture = date('H:i', strtotime($horaire['fermeture']));
+                ?>
+                <div class="mb-3">
+                    <label for="ouverture_<?php echo $horaire['jour']; ?>" class="form-label"><?php echo ucfirst($horaire['jour']); ?></label>
+                    <input type="time" name="horaires[<?php echo $horaire['jour']; ?>][ouverture]" value="<?php echo $ouverture; ?>" required>
+                    <input type="time" name="horaires[<?php echo $horaire['jour']; ?>][fermeture]" value="<?php echo $fermeture; ?>" required>
+                </div>
+            <?php endwhile; ?>
+            <button type="submit" class="btn btn-primary">Mettre à jour</button>
+        </form>
+    </div>
+<?php endif; ?>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="scriptdash.js"></script>
+<script>
+    // Supprime le paramètre "error" de l'URL après affichage
+    if (window.location.search.includes("error=acces_refuse")) {
+        const url = new URL(window.location);
+        url.searchParams.delete("error");
+        window.history.replaceState({}, document.title, url.toString());
+    }
+</script>
 </body>
 </html>

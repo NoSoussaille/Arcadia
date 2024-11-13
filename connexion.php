@@ -23,11 +23,23 @@
         echo "<div class='alert alert-danger text-center' role='alert'>
         Nom d'utilisateur ou mot de passe incorrect.
       </div>";
-    }
+    };
+
+      if (isset($_GET['message']) && $_GET['message'] === 'logout_success') {
+          echo "<p class='alert alert-success'>Vous avez été déconnecté avec succès.</p>";
+      }
     ?>
           </fieldset>
       </form>
 </div>
 
-
+<script src="script.js"></script>
+<script>
+  // Supprime le paramètre "error" de l'URL après affichage
+  if (window.location.search.includes("error=1")) {
+      const url = new URL(window.location);
+      url.searchParams.delete("error");
+      window.history.replaceState({}, document.title, url.toString());
+  }
+</script>
 <?php require_once 'elements/footer.php' ?>
