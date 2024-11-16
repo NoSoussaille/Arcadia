@@ -1,9 +1,25 @@
-<?php require_once 'elements/header.php' ?>
-<dix class="mainpage">
+<?php
+$title = "Contact - Zoo Arcadia";
+$meta_description = "Contactez nous pour avoir plus d'informations";
+require_once 'elements/header.php'; ?>
+
+<dix section="mainpage">
 <?php if (isset($_GET['message']) && $_GET['message'] == 'avis_envoye'): ?>
     <p class="alert alert-success">Merci pour votre avis !</p>
 <?php endif; ?>
-</dix>
+</section>
+<section class="mainpage">
+<?php if (isset($_GET['message'])): ?>
+    <?php if ($_GET['message'] == 'message_envoye'): ?>
+        <p class="alert alert-success">Votre message a été envoyé avec succès !</p>
+    <?php elseif ($_GET['message'] == 'erreur_envoi'): ?>
+        <p class="alert alert-danger">Une erreur s'est produite lors de l'envoi de votre message. Veuillez réessayer.</p>
+    <?php elseif ($_GET['message'] == 'erreur_formulaire'): ?>
+        <p class="alert alert-warning">Veuillez remplir tous les champs correctement.</p>
+    <?php endif; ?>
+<?php endif; ?>
+</section>
+
 <div class="mainpage">
    
    <img src="image/page d'accueil/Image.webp" alt="photo de l'entrée du zoo d'Arcadia" class="imgZoo">
@@ -52,32 +68,34 @@
             Email : zoo-arcadia@hotmail.fr
         </p>
    </div>
-
    <div class="title vert">
-        <h2 class="sous-menu beige">Envoyez un Message</h2>
-    </div>
-    <div class="title vert">
-        <form class="formulaire">
-            <fieldset id="contact">
-                <legend><h4>Contact</h4></legend>
+    <h2 class="sous-menu beige">Envoyez un Message</h2>
+</div>
+<div class="title vert">
+    <form class="formulaire" method="POST" action="submit_contact.php">
+        <fieldset id="contact">
+            <legend><h4>Contact</h4></legend>
 
-                <div id="div_nm">
-                    <label for="name">Nom :</label><input type="text" name="nom" id="name" placeholder="Nom" required>
-                </div>
+            <div id="div_nm">
+                <label for="name">Nom :</label>
+                <input type="text" name="nom" id="name" placeholder="Nom" required>
+            </div>
 
-                <div id="div_fnm">
-                    <label for="firstname">Prenom :</label><input type="text" name="prenom" id="firstname" placeholder="Prenom" required>
-                </div>
-            
-                <div>
-                    <label for="email">Email :</label><input type="email" id="email" name="email" placeholder="email@mail.com" required>
-                </div>
+            <div id="div_fnm">
+                <label for="firstname">Prenom :</label>
+                <input type="text" name="prenom" id="firstname" placeholder="Prenom" required>
+            </div>
 
-                <textarea name="message" id="message" cols="30" rows="10" placeholder="Message..." required></textarea>
-                <a href="#" class="button">Envoyer</a>
-            </fieldset>
-        </form>
-    </div>
+            <div>
+                <label for="email">Email :</label>
+                <input type="email" id="email" name="email" placeholder="email@mail.com" required>
+            </div>
+
+            <textarea name="message" id="message" cols="30" rows="10" placeholder="Message..." required></textarea>
+            <button type="submit" class="button">Envoyer</button>
+        </fieldset>
+    </form>
+</div>
     <div class="title beige">
     <h2 class="sous-menu vert">Laissez un avis</h2>
 </div>

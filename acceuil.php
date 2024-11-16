@@ -1,4 +1,6 @@
 <?php
+$title = "Accueil - Zoo Arcadia";
+$meta_description = "Bienvenue au Zoo Arcadia, un parc écologique et immersif avec une faune diversifiée et des services uniques pour toute la famille.";
 require_once 'elements/header.php';
 ?>
     <div class="title beige">
@@ -65,7 +67,7 @@ require_once 'elements/header.php';
     <div class="title vert">
     <h2 class="sous-menu beige">Les habitats du zoo</h2>
 </div>
-    <div class="mainpage4">
+<div class="mainpage4">
     <?php 
     // Récupération des habitats
     $query_habitats = "SELECT id, nom, description, image FROM habitats LIMIT 3";  // Limite à 3 habitats
@@ -75,7 +77,7 @@ require_once 'elements/header.php';
         // Génère le chemin de l'image pour chaque habitat
         $photo_path = !empty($habitat['image']) ? "dashbord/" . $habitat['image'] : "images/default_habitat.jpg";
     ?>
-        <a href="habitats.php?id=<?php echo $habitat['id']; ?>" class="card-link">
+        <a href="habitats.php#habitat-<?php echo $habitat['id']; ?>" class="card-link">
             <div class="card">
                 <img src="<?php echo htmlspecialchars($photo_path); ?>" class="card-img-top" alt="Image de <?php echo htmlspecialchars($habitat['nom']); ?>">
                 <div class="card-body">
@@ -104,8 +106,11 @@ require_once 'elements/header.php';
     while ($service = $result_services->fetch_assoc()):
         // Génère le chemin de l'image pour chaque service
         $photo_path = !empty($service['photo']) ? "dashbord/" . $service['photo'] : "images/default_service.jpg";
+        
+        // Génère un ID d'ancre unique basé sur le nom du service
+        $anchor_id = strtolower(str_replace(' ', '-', $service['nom']));  // Convertit les espaces en tirets
     ?>
-        <a href="service.php?id=<?php echo $service['id']; ?>" class="card-link">
+        <a href="service.php#<?php echo $anchor_id; ?>" class="card-link">
             <div class="card">
                 <img src="<?php echo htmlspecialchars($photo_path); ?>" class="card-img-top" alt="Image de <?php echo htmlspecialchars($service['nom']); ?>">
                 <div class="card-body">
@@ -115,10 +120,8 @@ require_once 'elements/header.php';
         </a>
     <?php endwhile; ?>
 </div>
-    </div>
-         <div class="mainpage4">
-            <a href="service.php" class="button">Voir plus</a>
-        </div>
+<div class="mainpage4">
+    <a href="service.php" class="button">Voir plus</a>
 </div>
 
 <?php
@@ -172,7 +175,7 @@ $result_services->free();
     ?>
     
 </div>
-<div class="mainpage6">
+<div class="mainpage5">
     <a href="contact.php#avis" class="button">Laisser un avis</a>
 </div>
 

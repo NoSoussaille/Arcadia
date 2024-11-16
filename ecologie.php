@@ -1,4 +1,7 @@
-<?php require_once 'elements/header.php'?>
+<?php
+$title = "Ecologie - Zoo Arcadia";
+$meta_description = "l'écologie est au coeur de notre zoo.";
+require_once 'elements/header.php'?>
     <div class="title beige">
         <h2 class="sous-menu vert">L'écologie au centre d'Arcadia</h2>
     </div>

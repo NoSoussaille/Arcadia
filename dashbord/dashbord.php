@@ -1,7 +1,7 @@
-<?php require_once 'headerdash.php' ?>
+<?php require_once 'headerdash.php'; ?>
 
 <div class="title beige">
-    <H3 class="sous-menu vert">Bienvenue, <?php echo htmlspecialchars($_SESSION['username']); ?>!</H3>
+    <h3 class="sous-menu vert">Bienvenue, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h3>
 </div>
 
 <?php
@@ -31,12 +31,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['role']) && $_SESSI
     header("Location: dashbord.php");
     exit();
 }
+
+// Récupérer le top 5 des animaux les plus populaires
+$popular_animals_result = $mysqli->query("SELECT prenom, race, popularite FROM animaux ORDER BY popularite DESC LIMIT 5");
 ?>
 
 <section class="dash1">
-    <iframe id="widget_autocomplete_preview"  width="400" height="320" frameborder="0" src="https://meteofrance.com/widget/prevision/352110##358D39CC" title="Prévisions Paimpont par Météo-France"> </iframe>
+    <iframe id="widget_autocomplete_preview" width="400" height="320" frameborder="0" src="https://meteofrance.com/widget/prevision/352110##358D39CC" title="Prévisions Paimpont par Météo-France"></iframe>
 </section>
 
+<div class="title beige">
+    <h3 class="sous-menu vert">Top 5 des Animaux les Plus Populaires</h3>
+</div>
+
+<div class="dash1">
+    <table class="table">
+        <thead>
+            <tr class="titre">
+                <th>Prénom</th>
+                <th>Race</th>
+                <th>Popularité</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php while ($animal = $popular_animals_result->fetch_assoc()): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($animal['prenom']); ?></td>
+                    <td><?php echo htmlspecialchars($animal['race']); ?></td>
+                    <td><?php echo htmlspecialchars($animal['popularite']); ?></td>
+                </tr>
+            <?php endwhile; ?>
+        </tbody>
+    </table>
+</div>
 <?php if ($_SESSION['role'] === 'administrateur'): ?>
     <div class="title beige">
         <h3 class="sous-menu vert">Modifier les Horaires d'Ouverture</h3>
@@ -60,8 +87,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['role']) && $_SESSI
     </div>
 <?php endif; ?>
 
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="scriptdash.js"></script>
 <script>
     // Supprime le paramètre "error" de l'URL après affichage
     if (window.location.search.includes("error=acces_refuse")) {

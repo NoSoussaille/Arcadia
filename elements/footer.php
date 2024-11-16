@@ -4,8 +4,7 @@
         <h3>Le parc</h3>
         <ul>
             <li><a href="horaire.php#tarif">Horaires et tarif</a></li>
-            <li><a href="#">Les animaux</a></li>
-            <li><a href="#">Les habitats</a></li>
+            <li><a href="habitats.php">Les habitats</a></li>
             <li><a href="ecologie.php">L'écologie</a></li>
         </ul>
     </div>
@@ -13,9 +12,9 @@
     <div class="footer-section">
         <h3>Nos Services</h3>
         <ul>
-            <li><a href="service.php#visite">Visite guidée</a></li>
-            <li><a href="service.php#restauration">restauration</a></li>
-            <li><a href="service.php#train">Le petit train</a></li>
+            <li><a href="service.php#le-petit-train">Le petit train</a></li>
+            <li><a href="service.php#visite-guidee">Visite guidée</a></li>
+            <li><a href="service.php#restauration">Restauration</a></li>
         </ul>
     </div>
 
