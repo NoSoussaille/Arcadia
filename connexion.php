@@ -1,4 +1,7 @@
-<?php require_once 'elements/header.php' ?>
+<?php
+$title = "Page de connection - Zoo Arcadia";
+$meta_description = "Espace employé.";
+require_once 'elements/header.php' ?>
 
 <div class="title beige">
   <h2 class="sous-menu vert">Connexion</h2>

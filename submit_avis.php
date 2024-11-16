@@ -1,6 +1,7 @@
 <?php
 // Connexion à la base de données
-require_once '../db_connection.php';
+require_once '
+db_connection.php';
 
 // Vérifie que le formulaire est soumis
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
